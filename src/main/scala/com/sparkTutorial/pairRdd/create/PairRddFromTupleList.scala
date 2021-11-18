@@ -10,8 +10,8 @@ object PairRddFromTupleList {
     val sc = new SparkContext(conf)
 
     val tuple = List(("Lily", 23), ("Jack", 29), ("Mary", 29), ("James", 8))
-    val pairRDD = sc.parallelize(tuple)
+    val pairRDD = sc.parallelize(tuple) // Converts tuple list to a pair RDD
 
-    pairRDD.coalesce(1).saveAsTextFile("out/pair_rdd_from_tuple_list")
+    pairRDD.coalesce(1).saveAsTextFile("out/pair_rdd_from_tuple_list")  // Writing the pair RDD to disk
   }
 }

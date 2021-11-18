@@ -1,5 +1,9 @@
 package com.sparkTutorial.pairRdd.filter
 
+import com.sparkTutorial.commons.Utils
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
+
 object AirportsNotInUsaProblem {
 
   def main(args: Array[String]) {
@@ -18,5 +22,24 @@ object AirportsNotInUsaProblem {
        ("Wewak Intl", "Papua New Guinea")
        ...
      */
+
+    Logger.getLogger("org").setLevel(Level.ERROR)
+    // Solution steps:
+
+    // Step 1: Create a spark Context
+    val conf = new SparkConf().setAppName("AirportsNotInUSA").setMaster("local[3]")
+    val sc = new SparkContext(conf)
+
+    // Step 2: Read the file as a normal string RDD
+    val allAirportDetails = sc.textFile("in/airports.text")
+
+    // Step 3: Convert this RDD into a pair RDD with key as airport name and value as country
+    val airportCountryPair = allAirportDetails.map(airportLine => (airportLine.split(Utils.COMMA_DELIMITER)(1), airportLine.split(Utils.COMMA_DELIMITER)(3)))
+
+    // Step 4: Filter out all the airports with country name as United States
+    val airportsNotInUS = airportCountryPair.filter(keyVal => keyVal._2 != "\"United States\"")
+
+    // Step 5: Save these filtered airport tuples to a text file
+    airportsNotInUS.saveAsTextFile("out/MyAirportsNotInUsaSolution.text")
   }
 }

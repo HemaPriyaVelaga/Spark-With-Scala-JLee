@@ -13,7 +13,7 @@ object TakeExample {
     val inputWords = List("spark", "hadoop", "spark", "hive", "pig", "cassandra", "hadoop")
     val wordRdd = sc.parallelize(inputWords)
 
-    val words = wordRdd.take(3)
+    val words = wordRdd.take(3) // Randomly returns 3 elements from the string RDD
     for (word <- words) println(word)
   }
 }

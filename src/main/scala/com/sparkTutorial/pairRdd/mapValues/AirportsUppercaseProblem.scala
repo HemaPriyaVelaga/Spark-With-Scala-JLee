@@ -1,5 +1,8 @@
 package com.sparkTutorial.pairRdd.mapValues
 
+import com.sparkTutorial.commons.Utils
+import org.apache.spark.{SparkConf, SparkContext}
+
 object AirportsUppercaseProblem {
 
   def main(args: Array[String]) {
@@ -19,5 +22,24 @@ object AirportsUppercaseProblem {
        ("Wewak Intl", "PAPUA NEW GUINEA")
        ...
      */
+
+    // Solution steps:
+
+    // Step 1: Create Spark Context object
+    val conf = new SparkConf().setAppName("My_Aiports_Uppercase_Solution").setMaster("local")
+    val sc = new SparkContext(conf)
+
+    // Step 2: Read the file as a string RDD
+    val airportStringRdd = sc.textFile("in/airports.text")
+
+    // Step 3: Now, extract only the airport name and its country into a pair RDD
+    val airportPairRDD = airportStringRdd.map(line => (line.split(Utils.COMMA_DELIMITER)(1), line.split(Utils.COMMA_DELIMITER)(3)))
+
+    // Step 4: Use the mapVal function to convert all the country names (here, the Values in KV pair) to Uppercase
+    val uppercase = airportPairRDD.mapValues(value => value.toUpperCase())
+
+    // Step 5: Save this final pair RDD to text file
+    uppercase.saveAsTextFile("out/My_Aiports_Uppercase_Solution.text")
+
   }
 }

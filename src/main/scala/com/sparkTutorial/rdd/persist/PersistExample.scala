@@ -14,9 +14,11 @@ object PersistExample {
     val inputIntegers = List(1, 2, 3, 4, 5)
     val integerRdd = sc.parallelize(inputIntegers)
 
-    integerRdd.persist(StorageLevel.MEMORY_ONLY)
+    integerRdd.persist(StorageLevel.MEMORY_ONLY)  // Persisting the RDD in the memory storage level
+    // Other available levels are disk, and a combination of disk and memory and can be also stored as serialised objects
 
-    integerRdd.reduce((x, y) => x * y)
-    integerRdd.count()
+    integerRdd.reduce((x, y) => x * y) // The first action called on RDD -> Here, Spark parallelizes the RDD and persists it and then perfoms reduce action
+    integerRdd.count() // Another action is called on the same RDD. In this case, since this RDD is already persisted, it doesnt call
+    // the parallelize method again and performs the count operation on the already persisted RDD
   }
 }

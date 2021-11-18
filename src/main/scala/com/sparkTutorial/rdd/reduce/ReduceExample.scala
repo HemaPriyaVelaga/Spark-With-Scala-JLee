@@ -12,7 +12,7 @@ object ReduceExample {
     val inputIntegers = List(1, 2, 3, 4, 5)
     val integerRdd = sc.parallelize(inputIntegers)
 
-    val product = integerRdd.reduce((x, y) => x * y)
+    val product = integerRdd.reduce((x, y) => x + y)
     println("product is :" + product)
   }
 }
