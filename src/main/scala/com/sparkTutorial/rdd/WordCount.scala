@@ -27,6 +27,11 @@ object WordCount {
 
     val wordCounts = words.countByValue() // Count the occurrence of each word
     // Here, we used countByValue instead of count because, if we use count, it wil just return the total number of words present in the RDD
+    // The countByValue has a problem: It is an action operation which will generate a histogram map having the count of each word
+    // in the memory of the driver program. But, if the data scale is too large, this histogram map would not be able to fit in the memory.
+    // So, an alternate way to do this is to use the reduceByKey operation which generates an RDD (and is NOT an action) consisting of each key
+    // and the reduced value for that key (check out the pairRDD/aggregation/WordCount example)
+
     for ((word, count) <- wordCounts) println(word + " : " + count) // Printing out the results
   }
 }
