@@ -20,7 +20,7 @@ object AverageHousePriceSolution {
 
     val housePriceAvg = housePriceTotal.mapValues(avgCount => avgCount.total / avgCount.count)
 
-    val sortedHousePriceAvg = housePriceAvg.sortByKey()
+    val sortedHousePriceAvg = housePriceAvg.sortByKey() // Prior to this, we converted the number of bedrooms from string to Integer
 
     for ((bedrooms, avgPrice) <- sortedHousePriceAvg.collect()) println(bedrooms + " : " + avgPrice)
   }

@@ -12,7 +12,7 @@ object JoinOperations {
         val ages = sc.parallelize(List(("Tom", 29),("John", 22)))
         val addresses = sc.parallelize(List(("James", "USA"), ("John", "UK")))
 
-        val join = ages.join(addresses)
+        val join = ages.join(addresses) // Inner Join
         join.saveAsTextFile("out/age_address_join.text")
 
         val leftOuterJoin = ages.leftOuterJoin(addresses)

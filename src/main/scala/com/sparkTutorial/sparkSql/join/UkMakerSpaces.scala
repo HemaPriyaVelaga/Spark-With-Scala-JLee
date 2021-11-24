@@ -11,10 +11,10 @@ object UkMakerSpaces {
 
     val session = SparkSession.builder().appName("UkMakerSpaces").master("local[*]").getOrCreate()
 
-    val makerSpace = session.read.option("header", "true").csv("in/uk-makerspaces-identifiable-data.csv")
+    val makerSpace = session.read.option("header", "true").csv("in/uk-makerspaces-identifiable-data.csv") // load in memory
 
     val postCode = session.read.option("header", "true").csv("in/uk-postcode.csv")
-       .withColumn("PostCode", functions.concat_ws("", functions.col("PostCode"), functions.lit(" ")))
+       .withColumn("PostCode", functions.concat_ws("", functions.col("PostCode"), functions.lit(" ")))  // load in memory
 
     System.out.println("=== Print 20 records of makerspace table ===")
     makerSpace.select("Name of makerspace", "Postcode").show()
@@ -23,8 +23,11 @@ object UkMakerSpaces {
     postCode.show()
 
     val joined = makerSpace.join(postCode, makerSpace.col("Postcode").startsWith(postCode.col("Postcode")), "left_outer")
+    // startsWith is to find the element of a col in left table that starts with the string present in a col of the right table element
 
     System.out.println("=== Group by Region ===")
     joined.groupBy("Region").count().show(200)
+
+    // alternative solution was with the broadcast variable. Refer to that section
   }
 }

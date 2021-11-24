@@ -16,16 +16,18 @@ object StackOverFlowSurvey {
 
     val responseRDD = sparkContext.textFile("in/2016-stack-overflow-survey-responses.csv")
 
+    // To filter responses from canada
     val responseFromCanada = responseRDD.filter(response => {
       val splits = response.split(Utils.COMMA_DELIMITER, -1)
       total.add(1)
 
       if (splits(14).isEmpty) {
-        missingSalaryMidPoint.add(1)
+        missingSalaryMidPoint.add(1) // add method is for the accumulator
       }
 
       splits(2) == "Canada"
     })
+    // here, total and missingSalaryMidPoint are 2 accumulators
 
     println("Count of responses from Canada: " + responseFromCanada.count())
     println("Total count of responses: " + total.value)
